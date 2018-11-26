@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拓朴云盘</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/index.css" />
+     <link rel="shortcut icon" href="img/favicon2.ico" type="image/x-icon" />
+    <style type="text/css">
+    .popup_menu{position:absolute; z-index:90; border:1px solid #AEAEAE; padding:2px; width:80px;border-radius:5px;}
+.popup_menu a{ display:block; color:#325B8E; text-indent:12px; text-decoration:none; height:26px; line-height:25px; padding-right:5px;}
+.popup_menu a:hover{ background:#57B4E4; color:#fff; border-radius:5px;}
+    .file-img-my i{
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    }
+    
+    .file-img-my{
+	    width: 100%;
+    height: 64px;
+    padding: 6px 2px 2px 2px;
+    text-align: center;    
+    }
+    .UploadWindows{
+     	z-index:1;
+    	height:300px;
+    	width:300px;
+    	background-color: #fff;
+    	border: 2px dashed #ccc;
+    	position: fixed;
+    	left: 40%;
+    	top:30%;
+    	display: none;
+    }
+    .UploadWindowsFormfile{
+    	height: 40px;
+    	width: 240px;
+    	 text-align:center;
+    	margin-left: 30px;
+    	margin-top: 60px;
+    }
+    .UploadWindowsFormsubmit{
+    	height: 40px;
+    	width: 120px;
+    	line-height: 40px;
+    	margin-left: 10px;
+    	margin-top: 140px;
+    	background-color: #CCCCCC;
+    	border-radius: 5px;
+    }
+    .UploadWindowsFormBtn{
+    height: 40px;
+    	width: 120px;
+    	line-height: 40px;
+    	margin-left: 30px;
+    	margin-top: 140px;
+    	background-color: #CCCCCC;
+    	border-radius: 5px;
+    }
+
+    #quxiaomouse{
+    	display: none;
+    }
+    .videoPlay{
+    display:none; 
+    position: fixed;
+     left: 550px;
+     top: 200px;
+      z-index:1;
+      width: 400px;
+      height: 300px;
+    }
+       .closeVideo button{
+    	height: 40px;
+    	width: 80px;
+    	margin-left: 120px;
+    }
+    .picturePaly{
+   display:none;
+    position: fixed;
+     left: 550px;
+     top: 200px;
+      z-index:1;
+      width: 400px;
+      height: 400px;
+    }
+    .picturePalyDiv{
+     width: 400px;
+      height: 350px;
+    }
+     .picturePalyDiv img{
+      width: 400px;
+      height: 350px;
+     }
+    .closeImg{
+    height: 40px;
+    	width: 80px;
+    	margin-left: 160px;
+    }
+	.selectIng{
+		height: 30px;
+		width: 40px;
+		line-height: 30px;
+	}
+    .xiangqingDiv{
+   		 z-index:1;
+    	height:300px;
+    	width:300px;
+    	background-color: #fff;
+    	border: 2px dashed #ccc;
+    	position: fixed;
+    	left: 40%;
+    	top:30%;
+    	display: none;
+    	
+    }
+    .xiangqingDivBtn{
+      height: 40px;
+    	width: 120px;
+    	line-height: 40px;
+    	margin-left: 90px;
+    	margin-top: 100px;
+    	background-color: #CCCCCC;
+    	border-radius: 5px;
+    }
+    .xiangqingDiv span {
+    position: relative;
+    top: 60px;
+    left: 10px;
+}
+    </style>
+</head>
+
+<body>
+<div id="videoPlaykeyId" class="videoPlay" >
+	<video class="videoplaywindows" id="videoplaywindowsId" width="320" height="240" controls autoplay >
+  <source src="" type="video/mp4">
+</video>
+<div class="closeVideo">
+<button onclick="closeVideo();">关闭</button>
+</div>
+</div>
+<div class="picturePaly" id="picturePaly">
+	<div class="picturePalyDiv">
+		<img alt="" src="" id="picturePalyImg">
+	</div>
+	<button class="closeImg" onclick="closeImg();">关闭</button>
+</div>
+	<div class="UploadWindows" id="UploadWindows" >
+		<form action="" enctype="multipart/form-data" method="post" class="UploadWindowsForm">
+		<div >
+		<input type="file" name="file" class="UploadWindowsFormfile">
+		</div>
+		<div >
+		<input type="submit"class="UploadWindowsFormsubmit">
+		<input type="button" value="关闭" onclick="downUploadWindows();" class="UploadWindowsFormBtn">
+		<input value="" name="filepath" style="display: none" id="UploadFilePath">
+		</div>
+		</form>
+	</div>
+	<div class="xiangqingDiv" id="xiangqingDivs" >
+	<span id="filenameIdSpan"></span><br><br>
+	<span id="filsizeIdSpan"></span><br><br>
+	<span id="filetypeIdSpan"></span><br><br>
+	<span id="filetimeIdSpan"></span><br><br>
+		<div >
+		<input type="button" value="关闭" onclick="downUploadWindowsXiangqing();" class="xiangqingDivBtn">
+		</div>
+	</div>
+    <div class="weiyun">
+        <header class="header">
+            <a href="#" class="logo">logo</a>
+            <div class="header-member"></div>
+            
+            <div data-no-selection="" class="user">
+                <div class="normal">
+                    <div class="inner">
+                        <img src="./img/g.jpg" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-search">
+                <div class="beautiful-input">
+                    <i class="ico"></i>
+                    <label>搜索全部文件</label>
+                    <input id="SearchId" onkeypress="SearchFile();" type="text" autocomplete="off" maxlength="40" aria-label="输入文件名并按下回车进行搜索" tabindex="0">
+                </div>
+            </div>
+            <div class="ad diff-adright">
+                <a class="renew-btn" id="MyCenterId" href="javascript:void(0);">
+                    <i class="icon"></i> 个人中心
+                </a>
+            </div>
+        </header>
+        <div class="weiyun-content">
+            <!-- 左边 -->
+            <div class="lay-aside">
+                <div data-action="upload" class="upload-btn">
+                    <a id="upload-btn" class="g-btn g-btn-blue" href="#" hidefocus="on"
+                    >
+                        <span class="btn-inner" onclick="loadUploadWindows();"><i>+</i><span class="text" >上传</span></span>
+                    </a>
+                </div>
+                <div class="aside-box" id="_main_nav_aside_box">
+                    <div class="aside-wrap" id="_main_nav_aside_wrap">
+                        <ul class="nav-box">
+                            <li class="nav-list nav-current">
+                                <a class="link all" href="javascript:loadFileSystem('root','');" title="首页"><i></i>首页</a>
+                            </li>
+                            <li class="nav-gap"><span class="gap"></span></li>
+                            <li class="nav-list">
+                                <a class="link doc" href="javascript:getType(1);" title="文档"><i></i>文档</a>
+                            </li>
+                            <li class="nav-list">
+                                <a class="link pic" href="javascript:getType(2);" title="图片"><i></i>图片</a>
+                            </li>
+                            <li class="nav-list">
+                                <a class="link voice" href="javascript:getType(3);" title="音乐"><i></i>音乐</a>
+                            </li>
+                            <li class="nav-list">
+                                <a class="link video" href="javascript:getType(4);" title="视频"><i></i>视频</a>
+                            </li>
+                            <li class="nav-gap"><span class="gap"></span></li>
+                            <li class="nav-list">
+                                <a class="link share" href="#" title="分享的链接"><i></i>分享的链接</a>
+                            </li>
+                            <li class="nav-list">
+                                <a class="link recycle" href="javascript:loadGarbageFileSystem('root','');" title="回收站"><i></i>回收站</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 右边 -->
+            <div class="main">
+                <div class="nav">
+                    <nav class="clearFix navCollects">
+                    
+                    <a href="#" class="rename">
+                            <span>
+                                <i></i>
+                                <span onclick="mouse();">选择</span>
+                            </span>
+                        </a>
+                         <a href="#" class="rename" id="quxiaomouse">
+                            <span>
+                                <i></i>
+                                <span onclick="qMouse();">取消选择</span>
+                            </span>
+                        </a>
+                        <a href="#" class="move">
+                            <span>
+                                <i></i>
+                                <span onclick="MoveFile();">移动</span>
+                            </span>
+                        </a>
+                         <a href="#" id="QueMoveFile" class="move" style="display: none">
+                            <span>
+                                <i></i>
+                                <span onclick="QueMoveFile();">移动到当前目录</span>
+                            </span>
+                        </a>
+                        <a href="#" class="move" >
+                            <span>
+                                <i style="background: url(img/xiazai.png) no-repeat;"></i>
+                                <span onclick="DownLoad();">下载</span>
+                            </span>
+                        </a>
+                        <a href="#" class="rename">
+                            <span>
+                                <i></i>
+                                <span onclick="RenameFile();">重命名</span>
+                            </span>
+                        </a>
+                        <a href="#" class="delect">
+                            <span>
+                                <i></i>
+                                <span onclick="DeleteFile();">删除</span>
+                            </span>
+                        </a>
+                        <a href="#" class="create">
+                            <span>
+                                <i></i>
+                                <span onclick="CrectedFolder();">新建文件夹</span>
+                            </span>
+                        </a>
+                          <a href="#" class="create">
+                            <span>
+                                <i style="background: url(img/shuaxin.png) no-repeat;"></i>
+                                <span onclick="SortFileSystem('time');">按时间排序</span>
+                            </span>
+                        </a>
+                           <a href="#" class="create">
+                            <span>
+                                <i style="background: url(img/shuaxin.png) no-repeat;"></i>
+                                <span onclick="SortFileSystem('size');">按大小排序</span>
+                            </span>
+                        </a>
+                           <a href="#" class="create">
+                            <span>
+                                <i style="background: url(img/shuaxin.png) no-repeat;"></i>
+                                <span onclick="SortFileSystem('name');">按名称排序</span>
+                            </span>
+                        </a>
+                        <a href="#" class="reload" onclick="javascript:loadFileSystem('root','')">
+                            <span>
+                                <i></i>
+                                <span ></span>
+                            </span>
+                        </a>
+                    </nav>
+                </div>
+                <!--  -->
+                <div class="content clearFix">
+                    <div class="tree-menu">
+                        <ul >
+                            <li>
+                               <div data-file-id="0" class="tree-title tree-contro tree-nav" style="padding-left:14px">
+								<span>
+										<strong class="ellipsis" onclick="javascript:loadFileSystem('root','')">root</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						
+                                <ul id="TreeUlId">
+                                <!-- 
+							<li>
+						<div data-file-id="1" class="tree-title tree-contro-none" style="padding-left:28px">
+								<span><strong class="ellipsis">我的文档</strong><i class="ico"></i></span>
+						</div>
+						
+				</li>
+				
+				<li>
+						<div data-file-id="600000" class="tree-title tree-contro-none" style="padding-left:28px">
+								<span>
+										<strong class="ellipsis">我的视频</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				
+				<li>
+						<div data-file-id="2" class="tree-title tree-contro" style="padding-left:28px">
+								<span>
+										<strong class="ellipsis">我的音乐</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul>
+				<li>
+						<div data-file-id="3" class="tree-title tree-contro" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">周杰伦</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul>
+				<li>
+						<div data-file-id="4" class="tree-title tree-contro-none" style="padding-left:56px">
+								<span>
+										<strong class="ellipsis">发如雪</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				
+				<li>
+						<div data-file-id="600" class="tree-title tree-contro-none" style="padding-left:56px">
+								<span>
+										<strong class="ellipsis">夜曲</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				</ul>
+				</li>
+				
+				<li>
+						<div data-file-id="4000" class="tree-title tree-contro-none" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">王杰</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				</ul>
+				</li>
+				
+				<li>
+						<div data-file-id="3000" class="tree-title tree-contro" style="padding-left:28px">
+								<span>
+										<strong class="ellipsis">我们的课程</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul>
+				<li>
+						<div data-file-id="9000" class="tree-title tree-contro-none" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">js初级课程</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				
+				<li>
+						<div data-file-id="8000" class="tree-title tree-contro-none" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">js初级课程</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				
+				<li>
+						<div data-file-id="984744" class="tree-title tree-contro-none" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">js中级课程</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				
+				<li>
+						<div data-file-id="920485" class="tree-title tree-contro-none" style="padding-left:42px">
+								<span>
+										<strong class="ellipsis">js高级课程</strong>
+										<i class="ico"></i>
+								</span>
+						</div>
+						<ul></ul>
+				</li>
+				</ul>
+				</li>-->
+				</ul> 
+                            </li>
+                        </ul> 
+                    </div>
+                    <div class="file-show">
+                        <div class="path-nav-box clearFix">
+                            <lable class="checked-all"></lable>
+                            <div class="path-nav clearFix myclass">
+                                <!-- <a href="javascript:;" style="z-index:3" data-file-id="0">微云</a>
+                                 <span class="current-path" style="z-index:2" data-file-id="0">我的音乐</span> -->
+                               <!-- <a href="javascript:;" style="z-index:1" data-file-id="0">我的文档</a> -->
+                            </div>
+                            <span class="selectIng" id="selectIng"></span>
+                        </div>
+                        <div class="g-empty sort-folder-empty">
+                            <div class="empty-box">
+                                <div class="ico"></div>
+                                <p class="title">暂无文件</p>
+                                <p class="content">请点击左上角的“上传”按钮添加</p>
+                            </div>
+                        </div>
+<div class="file-list clearFix" id="fileitem">
+<!-- 
+		<div class="file-item">
+				
+	<div class="item" data-file-id="1">
+			<lable class="checkbox"></lable>
+			<div class="file-img">
+					<i></i>
+			</div>
+			<p class="file-title-box">
+					<span class="file-title">我的文档</span>
+					<span class="file-edtor">
+							<input class="edtor" value="" type="text">
+					</span>
+			</p>
+	</div>
+	
+		</div>
+		<div class="file-item">
+				
+	<div class="item" data-file-id="600000">
+			<lable class="checkbox"></lable>
+			<div class="file-img">
+					<i></i>
+			</div>
+			<p class="file-title-box">
+					<span class="file-title">我的视频</span>
+					<span class="file-edtor">
+							<input class="edtor" value="" type="text">
+					</span>
+			</p>
+	</div>
+	
+		</div>
+		<div class="file-item">
+				
+	<div class="item" data-file-id="2">
+			<lable class="checkbox"></lable>
+			<div class="file-img">
+					<i></i>
+			</div>
+			<p class="file-title-box">
+					<span class="file-title">我的音乐</span>
+					<span class="file-edtor">
+							<input class="edtor" value="" type="text">
+					</span>
+			</p>
+	</div>
+	
+		</div>
+		<div class="file-item">
+				
+	<div class="item" data-file-id="3000">
+			<lable class="checkbox"></lable>
+			<div class="file-img">
+					<i></i>
+			</div>
+			<p class="file-title-box">
+					<span class="file-title">我们的课程</span>
+					<span class="file-edtor">
+							<input class="edtor" value="" type="text">
+					</span>
+			</p>
+	</div>
+	
+		</div>
+		 --></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="full-tip-box">
+        <span class="full-tip">
+            <span class="inner">
+                <i class="ico"></i>
+                <span class="text" data-id="label">新建文件夹成功</span>
+        </span>
+        </span>
+    </div>
+    <div class="content-menu" style="z-index: 10;">
+        <ul class="large " style="">
+            <li class="menu_li upload">
+                <a href="javascript:void(0);">
+                    <i class="ico"></i>
+                    <span >下载</span>
+                </a>
+            </li>
+            <li class="menu_li delect">
+                <a href="javascript:void(0);">
+                    <i class="ico"></i>
+                    <span>删除</span>
+                </a>
+            </li>
+            <li class="menu_li move">
+                <a href="javascript:void(0);">
+                    <i class="ico"></i>
+                    <span>移动到</span>
+                </a>
+            </li>
+            <li class="menu_li rename">
+                <a href="javascript:void(0);">
+                    <i class="ico"></i>
+                    <span>重命名</span>
+                </a>
+            </li>
+            <li class="split">
+                <div class="line">
+                    <div></div>
+                </div>
+            </li>
+            <li class="menu_li">
+                <a href="javascript:void(0);">
+                    <i class="ico-share"></i>
+                    <span>分享</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--<div class="drag-helper ui-draggable-dragging" >
+        <div class="icons"> 
+            <i class="icon icon0 filetype icon-folder"></i> 
+             <i class="icon icon0 filetype icon-folder"></i>           
+            <i class="icon icon1 filetype icon-folder"></i>       
+            <i class="icon icon2 filetype icon-folder"></i>      
+            <i class="icon icon3 filetype icon-folder"></i>   
+        </div>
+        <span class="sum">1</span>
+    </div>-->
+    <input type="hidden" value="0" id="getpid">
+    <script src="js/tools.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/handledata.js"></script>
+    <!-- <script src="src/popup/js/popup.js"></script> -->
+    <script src="js/main.js"></script>
+     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+    var NOWPATH=null;
+    var NOWFILEPATH=null;
+    var UserId=null;
+    var checkedbox=true;
+    var path="root";
+    var uri="";
+    var LoadFlag=0;
+    CheckedLogin();
+    filesystem();
+	loadFileSystem(path,uri);
+	//选择
+		function loadUploadWindows(){
+			console.log("loadUploadWindows--------------------------");
+			var UploadFilePath=document.getElementById("UploadFilePath");
+			UploadFilePath.value=funfor();
+			var UploadWindows=document.getElementById("UploadWindows");
+			UploadWindows.style.display="block";
+			$(function(){
+				$(".file-list").delegate(".file-item","hover",function(event){
+						$(this).toggleClass('file-checked');
+					});
+				});
+			}
+		//取消选择
+		function downUploadWindows(){
+			console.log("downUploadWindows--------------------------");
+			var UploadWindows=document.getElementById("UploadWindows");
+			UploadWindows.style.display="none";
+			}
+		//多选按钮实现点击打勾，并且保存当前所有选中文件的路径
+   		function labletChecked(filename){
+   			var pathnavbox=document.getElementsByClassName("path-nav-box");
+   			var	selectIng=document.getElementById("selectIng");
+   			checkedbox=true;
+			var checkbox=document.getElementById("checkbox "+filename);
+			console.log(checkbox.className.endsWith("checked"));
+			if(checkbox.className.endsWith("checked")==true){
+				var re=filename+"||";
+				selectIng.innerHTML=selectIng.innerHTML.replace(re,"");
+				if(!selectIng.innerHTML.endsWith("||")){
+					selectIng.innerHTML="";
+					}
+				checkbox.className="checkbox";
+				getSelectFileName();
+				return;
+				}
+			if(checkbox!=null&&checkedbox==true){
+				if(selectIng.innerHTML==""){
+					selectIng.innerHTML="已选中： "+filename+"||"
+					}else{
+						selectIng.innerHTML=selectIng.innerHTML+filename+"||";
+						}
+				
+				checkbox.className=checkbox.className+" "+"checked"
+				checkedbox=false;
+				getSelectFileName();
+				}
+	   		}
+   		
+   		//检查是否登陆
+   		function CheckedLogin(){
+   	   		var MyCenterId=document.getElementById("MyCenterId");
+   			var id=getRequest("id");
+			if(id!=""&&id!=null){
+					console.log("已经登陆  ->>>>>>>>>>>>>>>>>>>>>id="+id);
+					UserId=id;
+					var MyCenterIdhref="mygxin.jsp?id="+id;
+					 MyCenterId.setAttribute('href',MyCenterIdhref );
+					var c=document.getElementsByClassName("UploadWindowsForm");
+					c[0].action="UpLoadFile.do?id="+id;
+				}else{
+					console.log("请登录");
+					}
+   	   		}
+		//获取request的值
+    	function getRequest(strParame) {
+            var args = new Object();
+            var query = location.search.substring(1);
+
+            var pairs = query.split("&"); // Break at ampersand
+            for (var i = 0; i < pairs.length; i++) {
+                var pos = pairs[i].indexOf('=');
+                if (pos == -1) continue;
+                var argname = pairs[i].substring(0, pos);
+                var value = pairs[i].substring(pos + 1);
+                value = decodeURIComponent(value);
+                args[argname] = value;
+            }
+            return args[strParame];
+        }
+
+      //下载文件  
+   		function DownLoad(){
+   			var	selectIng=document.getElementById("selectIng");
+   			var filepath=getSelectFileName();
+   			if(filepath.split("$").length>2){
+	   			alert("不能批量下载");
+				return ;
+	   			}
+   			if(filepath.indexOf(".")==false){
+				alert("不能下载文件夹");
+				return ;
+	   			}
+   			if(filepath!=""){
+   			 if(confirm('确定下载此文件?')){
+   				filepath=encodeURIComponent(filepath);
+   				location="download.do?filepath="+filepath;
+   				selectIng.innerHTML="";
+	   			}
+	   			}else{
+					alert("请选择文件");
+		   			}
+   			
+	   		}
+   		//加载主页文件 path：路径    ；uri：请求地址
+	function loadFileSystem(path,uri){
+	var fileitem=document.getElementById("fileitem");
+	var pathnav=document.getElementsByClassName("myclass");
+	console.log(pathnav);
+			pathnav[0].innerHTML="";
+			var str=path.split("+");
+			//生成导航栏
+			for ( var u = 0; u < str.length; u++) {
+					var  loadSpan=document.createElement("span");
+					loadSpan.className="current-path";
+					loadSpan.style="z-index:1";
+					loadSpan.innerHTML=str[u];
+					pathnav[0].appendChild(loadSpan);	
+			}
+
+	fileitem.innerHTML="";
+		$.post(
+				uri+"getfile.do?",
+    			{"id":UserId,
+	    		"root":path},
+    			function(data){
+	    			funload(data);
+	    			if(LoadFlag==0){
+	    				$(function(){
+	    					$(".file-list").delegate(".file-item","hover",function(event){
+	    							$(this).toggleClass('file-checked');
+	    						});
+	    					});
+		    			}
+	    			LoadFlag++;
+	    		}
+				);
+
+    
+var kyoPopupMenu={};
+kyoPopupMenu = (function(){
+return {
+    sys: function (obj) {
+		$('.popup_menu').remove();
+        popupMenuApp = $('<div class="popup_menu app-menu"><ul><li><a menu="menu1">分享</a></li><li><a menu="menu2">删除</a></li><li><a menu="menu3">移动</a></li><li><a menu="menu4">下载</a></li><li><a menu="menu5">重命名</a></li><a menu="menu6">新建文件夹</a></li><a menu="menu7">查看详情页</a></li></ul></div>')
+		.find('a').attr('href','javascript:;')
+		.end().appendTo('body');
+		//绑定事件
+		$('.app-menu a[menu="menu1"]').on('click', function (){
+			var filepath=getSelectFileName();
+			if(filepath==""){
+				alert("请选择文件分享");
+				return;
+				} 
+			$.post(
+					"linkShare.do?",
+		  			{"id":UserId,
+		  	  			"filepath":filepath},
+		  			function(data){
+				  			data="192.168.1.79:8080/TopCloud/linkSharedownload.do?MD5ID="+data;
+		  	  			alert("分享下载链接为："+data);
+		  	  		var	selectIng=document.getElementById("selectIng");
+			   		selectIng.innerHTML="";
+			   		loadFileSystem("root",uri);
+		  	  			}
+					);
+        });
+		$('.app-menu a[menu="menu2"]').on('click', function (){
+			DeleteFile();
+        });
+		$('.app-menu a[menu="menu3"]').on('click', function (){
+			MoveFile();
+        });
+		$('.app-menu a[menu="menu4"]').on('click', function (){
+			DownLoad();
+        });
+		$('.app-menu a[menu="menu5"]').on('click', function (){
+			RenameFile();
+        });
+		$('.app-menu a[menu="menu6"]').on('click', function (){
+			CrectedFolder();
+        });
+		$('.app-menu a[menu="menu7"]').on('click', function (){
+			var filepath=getSelectFileName();
+			if(filepath==""){
+				alert("请选择文件查看详情");
+				return;
+				} 
+			var xiangqingDivs=document.getElementById("xiangqingDivs");
+			var filenameIdSpan=document.getElementById("filenameIdSpan");
+			var filsizeIdSpan=document.getElementById("filsizeIdSpan");
+			var filetypeIdSpan=document.getElementById("filetypeIdSpan");
+			var filetimeIdSpan=document.getElementById("filetimeIdSpan");
+			console.log(xiangqingDivs);
+			xiangqingDivs.style.display="block";
+			$.post(
+					"getFileInfoByfilename.do?",
+		  			{"id":UserId,
+		  	  			"filepath":filepath},
+		  			function(data){
+							console.log(data);
+							var json=eval(data);
+							filenameIdSpan.innerHTML="文件名称:&nbsp&nbsp&nbsp"+json.filename;
+							var filesize=json.filesize;
+							var files="";
+							if(filesize>1024*1024){
+								filesize=filesize/(1024*1024);
+								files=filesize+"MB"
+								}else if(filesize>1024){
+									filesize=filesize/1024;
+									files=filesize+"KB"
+									}else{
+										files=filesize+"B"
+										}
+							filsizeIdSpan.innerHTML="文件大小:&nbsp&nbsp&nbsp"+files;
+							filetypeIdSpan.innerHTML="文件类型:&nbsp&nbsp&nbsp"+json.filetype;
+							var date = new Date(json.fileuploadtime);
+							var Y = date.getFullYear() + '-';
+							var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+							var D = date.getDate() + ' ';
+							var h = date.getHours() + ':';
+							var m = date.getMinutes() + ':';
+							var s = date.getSeconds(); 
+							filetimeIdSpan.innerHTML="修改时间:&nbsp&nbsp&nbsp"+Y+M+D+h+m+s;
+							
+		  	  			}
+					);
+			
+        });
+		return popupMenuApp;
+	}
+}})();
+//取消右键
+$('html').on('contextmenu', function (){return false;}).click(function(){
+	$('.popup_menu').hide();
+});
+//桌面点击右击
+$('html').on('contextmenu',function (e){
+	var popupmenu = kyoPopupMenu.sys();
+  	l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+  	t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+popupmenu.css({left: l,top: t}).show();
+  	return false;
+});   
+	   }
+	//伪文件系统，文件系统树
+    function filesystem(){
+    	var TreeUlId=document.getElementById("TreeUlId");
+    	TreeUlId.innerHTML="";
+  	  	var root=path+"+show";
+  	  $.post(
+    			"getAllfile.do?",
+    			{"id":UserId},
+    			function(data){
+    	  			console.log(data);
+    	  			var json=eval(data);
+    				for(let i=0;i<json.length;i++){
+    	  				console.log(json[i].dir+"11111111111111111");
+							if(json[i].dir==true&&json[i].filelevel==1){
+								var li=document.createElement("li");
+	        					var div=document.createElement("div");
+	        					var span=document.createElement("span");
+	        					var spans=document.createElement("span");
+	        					var strong=document.createElement("strong");
+	        					var si=document.createElement("i");
+	        					var a=document.createElement("a");
+	        					var partment="javascript:loadFileSystem('root+"+json[i].filename+"','"+uri+"');";
+	        					a.setAttribute('href', partment);
+	        					spans.innerHTML=json[i].filepath;
+	        					spans.id=""+json[i].filename;
+	        					spans.style="display:none"
+	        					div.id=""+json[i].filename;;
+	        					div.className="tree-title tree-contro-none";
+	        					div.style="padding-left:28px";
+	        					strong.className="ellipsis";
+	        					strong.innerHTML=json[i].filename;
+	        					si.className="ico";
+	        					li.appendChild(div);
+	        					li.appendChild(spans);
+	        					div.appendChild(span);
+	        					a.appendChild(strong);
+	        					span.appendChild(a);
+	        					span.appendChild(si);
+	        					TreeUlId.appendChild(li);
+								}
+        	  			}
+    			}
+    		);
+
+  	  }
+	  //分类查看
+    function getType(type){
+        var uriType="";
+		if(type==1){
+			uriType =uriType+"selectFileByDocument.do?";
+			loadFileSystem(path,uriType);
+			}else if(type==2){
+				uriType =uriType+"selectFileByPicture.do?";
+				loadFileSystem(path,uriType);
+				}else if(type==3){
+					uriType =uriType+"selectFileByMusic.do?";
+					loadFileSystem(path,uriType);
+				}else if(type==4){
+					uriType =uriType+"selectFileByVideo.do?";
+					loadFileSystem(path,uriType);
+				}
+	
+        }
+   {
+    	var fileitem=document.getElementsByClassName("file-item");
+   		var fileitemname=fileitem[0].className;
+    	console.log(fileitem);
+    	for ( var i = 0; i < fileitem.length; i++) {
+    		fileitem[i].className=fileitemname+" "+"file-checked";
+		}
+    	document.getElementById("quxiaomouse").style.display="block";
+        }
+   		function qMouse(){
+   			document.getElementById("quxiaomouse").style.display="none";
+   			var fileitem=document.getElementsByClassName("file-item");
+   	   	for ( var i = 0; i < fileitem.length; i++) {
+    		fileitem[i].className="file-item";
+		}
+    	
+   	   		}
+
+			//获取所有选择的文件名
+	   	function getSelectFileName(){
+			var checked =document.getElementsByClassName("checked");
+			var resultFilename="";
+			var uriy=funfor();
+			for ( var i = 0; i < checked.length; i++) {
+				var filename=checked[i].id;
+				console.log("filename.indexOf('checkbox')"+filename.indexOf("checkbox"));
+				filename=filename.substring(filename.indexOf(" ")+1,filename.length);
+				resultFilename+=uriy+filename+"$";
+			}
+			console.log("resultFilename--------------------------------"+resultFilename);
+			return resultFilename;
+			
+		   	}
+	   	//循环遍历出当前路径
+	   	function funfor(){
+		   	var result="";
+				var currentpath=document.getElementsByClassName("current-path");
+				for ( var w = 0; w < currentpath.length; w++) {
+					result+=currentpath[w].innerHTML+"+";
+				}
+				console.log("result----------------------------------"+result);
+				return result;
+		   	}
+		//新建文件夹
+	   	function CrectedFolder(){
+	   		var rnstr = prompt("请输入新建文件夹名称","");
+	   		var pathle=funfor();
+	   		console.log("新建文件夹------------------------>:"+rnstr);
+	   		if(rnstr==null){
+				alert("不能创建空文件夹：请输入名称");
+				return;
+		   		}
+			$.post(
+				uri+"CrectedFolder.do?",
+				{"id":UserId,
+				"name":	rnstr,
+				"path":pathle
+				},
+				function(data){
+					if(data==1){
+						alert("新建文件夹成功");
+						 filesystem();
+						 loadFileSystem(pathle,uri);
+						}else{
+						alert("新建文件夹失败");	
+							}
+	
+					}
+					);
+		   	}
+
+	   	//删除文件或文件夹(批量删除)
+	   	function DeleteFile(){
+	   		var	selectIng=document.getElementById("selectIng");
+	   		var pathle=getSelectFileName();
+	   		if(pathle==""){
+		   		alert("请选择文件OR文件夹");
+					return;
+		   		}
+	   	 if(confirm('确定删除此文件or文件夹吗?')) {
+	   		var pathles=pathle;
+	   		var shuaxinpath=funfor();
+	   		console.log(pathles);
+	   		var n = (pathles.split('$')).length-1;
+	   		console.log(n);
+	   		if(n>1){
+	   	 	  console.log("批量删除");
+	  			$.post(
+	  				uri+"DeleteBatchFile.do?",
+	  				{"id":UserId,
+	  				"filepath":pathle
+	  				},
+	  				function(data){
+	  					if(data!=0){
+	  						alert("删除成功");
+	  						selectIng.innerHTML="";
+	  						 filesystem();
+	  						 loadFileSystem(shuaxinpath,uri);
+	  						}else{
+	  						alert("删除失败");	
+	  							}
+	  	
+	  					}
+	  					);
+		   		}else{
+				
+		   		 console.log("删除一条");
+					$.post(
+						uri+"DeleteFile.do?",
+						{"id":UserId,
+						"filepath":pathle
+						},
+						function(data){
+							if(data==1){
+								alert("删除成功");
+								selectIng.innerHTML="";
+								 filesystem();
+								 loadFileSystem(path,uri);
+								}else{
+								alert("删除失败");	
+									}
+							}
+							);
+			   		}
+		   	 }
+		   	}
+	   	
+
+	   	//重命名文件or文件夹
+	   	function RenameFile(){
+	   		var	selectIng=document.getElementById("selectIng");
+	   		var oldName=getSelectFileName();
+	   		if(oldName!=""){
+	   		var rnstr = prompt("请输入新的文件名or文件夹名：如showOR1.txt","");
+	   		var paths=funfor();
+	   		var newName=rnstr;
+	   		$.post(
+					"changeName.do?",
+					{"id":UserId,
+					"newName":newName,
+					"oldName":oldName,
+					"path":paths
+					},
+					function(data){
+							alert("重命名成功");
+							selectIng.innerHMTL="";
+							 filesystem();
+							 loadFileSystem(path,uri);
+						}
+						);
+	   		
+	   		}else{
+	   			alert("请选择文件OR文件夹");
+				return;
+		   		}
+		   	}
+	   	function Fileloadding(filename){
+		   			console.log("文件预览");
+					paths=funfor();
+					paths=paths+filename;
+					//location="http://localhost:8080/TopCloud/loaddingdoc.do?path="+paths;
+					if(filename.indexOf(".txt")!=-1){
+					$.post(
+							"loaddingdoc.do?",
+							{"path":paths},
+							function(data){
+								if(data!=0){
+									location="doc.jsp";
+									}else{
+										alert("文件不支持预览");
+										}
+								}
+							 );
+		   			}else if(filename.indexOf(".mp3")!=-1){
+			   				location="music.html?path="+paths+"&filename="+filename;
+		   			}else if(filename.indexOf(".mp4")!=-1){
+			   			var videoPlay =document.getElementById("videoPlaykeyId");
+			   			var videoplaywindowsId =document.getElementById("videoplaywindowsId");
+			   			console.log(videoPlay);
+			   			$.post(
+			   					"loaddingVideo.do?",
+								{"path":paths,
+									"filename":filename},
+								function(data){
+									if(data!=0){
+										videoPlay.style.display="block";
+										videoplaywindowsId.src="video/"+filename;
+										}else{
+											alert("文件不支持预览");
+											}
+									}
+					   			);
+			   			
+		   			}if(filename.indexOf(".png")!=-1||filename.indexOf(".jpg")!=-1||filename.indexOf(".jpeg")!=-1){
+		   				var picturePaly =document.getElementById("picturePaly");
+		   				var picturePalyImg =document.getElementById("picturePalyImg");	
+		   		   			$.post(
+		   					"loaddingPicture.do?",
+							{"path":paths,
+								"filename":filename},
+							function(data){
+								if(data!=0){
+									picturePaly.style.display="block";	
+									picturePalyImg.src="img/"+filename;
+									}else{
+										alert("文件不支持预览");
+										}
+								}
+				   			);
+		   			}
+
+				   	}
+
+	   	function closeVideo(){
+	   		var videoPlay =document.getElementById("videoPlaykeyId");
+	   		videoPlay.style.display="none";
+	   		var videoplaywindowsId =document.getElementById("videoplaywindowsId");
+	   		videoplaywindowsId.src="";
+		   	}
+	   	function closeImg(){
+	   		var picturePaly =document.getElementById("picturePaly");
+	   		picturePaly.style.display="none";
+		   	}
+	   	var MoveoldPath=null;
+	   	var MovefileName=null;
+	  //移动文件
+	   	function MoveFile(){
+	   		var pathle=getSelectFileName();
+	   		console.log("MoveFile-------------->"+pathle);
+	   		if(pathle!=""){
+	   			MoveoldPath=funfor();
+	   			MovefileName=pathle;
+	   			console.log("移动前目录："+MoveoldPath+"------>移动文件名："+MovefileName)
+	   		var QueMoveFile=document.getElementById("QueMoveFile");
+	   		QueMoveFile.style.display="block";
+	   		}else{
+				alert("请选择文件");
+		   		}
+		   	}		
+	   	function QueMoveFile(){
+	   		var	selectIng=document.getElementById("selectIng");
+	   		var pathles=funfor();
+	   		console.log("移动后目录：----------------------->"+pathles);
+	   		if(pathles!=""){
+	   			if(confirm('确定移动文件吗?')) {
+					$.post(
+							"MoveFile.do?",
+							{"id":UserId,
+							"newPath":pathles,
+							"oldPath":MoveoldPath,
+							"fileName":MovefileName
+							},
+							function(data){
+								if(data==1){
+									alert("移动成功");
+									var QueMoveFile=document.getElementById("QueMoveFile");
+							   		QueMoveFile.style.display="none";
+							   		selectIng.innerHTML="";
+									 filesystem();
+									 loadFileSystem(pathles,uri);
+									}else{
+									alert("移动失败");	
+										}
+				
+								}
+								);
+					
+					}
+				}
+		   	}
+		//排序
+	   	function SortFileSystem(type){
+	   		var	selectIng=document.getElementById("selectIng");
+	   		selectIng.innerHTML="";
+	   		var fileitem=document.getElementById("fileitem");
+	   		fileitem.innerHTML="";
+			$.post(
+   					"sortFileSystem.do?",
+					{"type":type},
+					function(data){
+						funload(data);
+						}
+		   			);
+		   	} 
+
+	   	function funload(data){
+	   		var fileitem=document.getElementById("fileitem");
+	   		console.log(data);
+			var json=eval(data);
+			//生成所有文件夹
+			for(let i=0;i<json.length;i++){
+				if(json[i].dir==true){
+				var div0=document.createElement("div");
+				var div1=document.createElement("div");
+				var si=document.createElement("i");
+				var lable=document.createElement("lable");
+				var div2=document.createElement("div");
+				var p=document.createElement("p");
+				var span1=document.createElement("span");
+				var span2=document.createElement("span");
+				var input=document.createElement("input");
+				var a=document.createElement("a");
+				filepath=json[i].filepath;
+				filepath=filepath.replace("C:\\apache-tomcat-6.0.18\\webapps\\upload","");
+				filepath=filepath.replace("\\","+");
+				console.log("filepath.length----------------------"+filepath.length);
+				if(filepath.length!=0){
+					var partment="javascript:loadFileSystem('root"+filepath+"+"+json[i].filename+"','"+"');";
+					}else{
+						var partment="javascript:loadFileSystem('root+"+filepath+json[i].filename+"','"+"');";
+    					}
+				partment=partment.replace("\\","+"); 					
+				a.setAttribute('href', partment);
+				//a.href="loadFileSystem(partment);"
+				div1.className="item";
+				div1.id=""+json[i].filename;
+				lable.className="checkbox";
+				lable.id="checkbox "+json[i].filename;
+				
+				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+				div2.className="file-img";
+				p.className="file-title-box";
+				span1.className="file-title";
+				span2.className="file-edtor";
+				input.className="edtor";
+				input.value="";
+				input.type="text";
+				div2.appendChild(si);
+				a.appendChild(span1);
+				p.appendChild(a);
+				p.appendChild(span2);
+				span2.appendChild(input);
+				span1.innerHTML=json[i].filename;
+				div1.appendChild(lable);
+				div1.appendChild(div2);
+				div1.appendChild(p);
+				console.log(div1);
+				div0.className="file-item";
+				div0.id="file-item";
+				div0.appendChild(div1);
+				fileitem.appendChild(div0);
+				}
+			}
+			for(let i=0;i<json.length;i++){
+				if(uri=="http://localhost:8080/TopCloud/getfile.do?"){
+				if(json[i].dir==false&&json[i].filelevel==1){
+				var div0=document.createElement("div");
+				var div1=document.createElement("div");
+				var si=document.createElement("i");
+				var lable=document.createElement("lable");
+				var div2=document.createElement("div");
+				var p=document.createElement("p");
+				var span1=document.createElement("span");
+				var span2=document.createElement("span");
+				var input=document.createElement("input");
+				var a=document.createElement("a");
+				var partment="javascript:Fileloadding('"+json[i].filename+"');";
+				a.setAttribute('href', partment);    					
+				div1.className="item";
+				div1.id=""+json[i].filename;
+				lable.className="checkbox";
+				lable.id="checkbox "+json[i].filename;
+				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+				div2.className="file-img-my";
+				p.className="file-title-box";
+				span1.className="file-title";
+				span2.className="file-edtor";
+				input.className="edtor";
+				input.value="";
+				input.type="text";
+				si.style.background="url(img/"+json[i].filetype+".png) no-repeat 0px 2px";
+				div2.appendChild(si);
+				a.appendChild(span1);
+				p.appendChild(a);
+				p.appendChild(span2);
+				span2.appendChild(input);
+				span1.innerHTML=json[i].filename;
+				div1.appendChild(lable);
+				div1.appendChild(div2);
+				div1.appendChild(p);
+				console.log(div1);
+				div0.className="file-item";
+				div0.id="file-item";
+				div0.appendChild(div1);
+				fileitem.appendChild(div0);
+				}
+			}else if(json[i].dir==false){
+				var div0=document.createElement("div");
+				var div1=document.createElement("div");
+				var si=document.createElement("i");
+				var lable=document.createElement("lable");
+				var div2=document.createElement("div");
+				var p=document.createElement("p");
+				var span1=document.createElement("span");
+				var span2=document.createElement("span");
+				var input=document.createElement("input");
+				var a=document.createElement("a");
+				var partment="javascript:Fileloadding('"+json[i].filename+"');";
+				a.setAttribute('href', partment);
+				div1.className="item";
+				div1.id=""+json[i].filename;
+				lable.className="checkbox";
+				lable.id="checkbox "+json[i].filename;
+				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+				div2.className="file-img-my";
+				p.className="file-title-box";
+				span1.className="file-title";
+				span2.className="file-edtor";
+				input.className="edtor";
+				input.value="";
+				input.type="text";
+				si.style.background="url(img/"+json[i].filetype+".png) no-repeat 0px 2px";
+				div2.appendChild(si);
+				a.appendChild(span1);
+				p.appendChild(a);
+				p.appendChild(span2);
+				span2.appendChild(input);
+				span1.innerHTML=json[i].filename;
+				div1.appendChild(lable);
+				div1.appendChild(div2);
+				div1.appendChild(p);
+				console.log(div1);
+				div0.className="file-item";
+				div0.id="file-item";
+				div0.appendChild(div1);
+				fileitem.appendChild(div0);
+				}
+			}
+		}
+	   function loadGarbageFileSystem(path,uri){
+		   var fileitem=document.getElementById("fileitem");
+			var pathnav=document.getElementsByClassName("myclass");
+			console.log(pathnav);
+					pathnav[0].innerHTML="";
+					var str=path.split("+");
+					//生成导航栏
+					for ( var u = 0; u < str.length; u++) {
+							var  loadSpan=document.createElement("span");
+							loadSpan.className="current-path";
+							loadSpan.style="z-index:1";
+							loadSpan.innerHTML=str[u];
+							pathnav[0].appendChild(loadSpan);	
+					}
+
+			fileitem.innerHTML="";
+				$.post(
+						"getGarbageFileSystem.do?",
+		    			{"id":UserId,
+			    		"root":path},
+		    			function(data){
+			    			var fileitem=document.getElementById("fileitem");
+			    	   		console.log(data);
+			    			var json=eval(data);
+			    			//生成所有文件夹
+			    			for(let i=0;i<json.length;i++){
+			    				if(json[i].dir==true&&json[i].filelevel==1){
+			    				var div0=document.createElement("div");
+			    				var div1=document.createElement("div");
+			    				var si=document.createElement("i");
+			    				var lable=document.createElement("lable");
+			    				var div2=document.createElement("div");
+			    				var p=document.createElement("p");
+			    				var span1=document.createElement("span");
+			    				var span2=document.createElement("span");
+			    				var input=document.createElement("input");
+			    				var a=document.createElement("a");
+			    				filepath=json[i].filepath;
+			    				filepath=filepath.replace("C:\\apache-tomcat-6.0.18\\webapps\\upload","");
+			    				filepath=filepath.replace("\\","+");
+			    				console.log("filepath.length----------------------"+filepath.length);
+			    				if(filepath.length!=0){
+			    					var partment="javascript:loadGarbageFileSystem('root"+filepath+"+"+json[i].filename+"','"+uri+"');";
+			    					}else{
+			    						var partment="javascript:loadGarbageFileSystem('root+"+filepath+json[i].filename+"','"+uri+"');";
+			        					}
+			    				    					
+			    				a.setAttribute('href', partment);
+			    				//a.href="loadFileSystem(partment);"
+			    				div1.className="item";
+			    				div1.id=""+json[i].filename;
+			    				lable.className="checkbox";
+			    				lable.id="checkbox "+json[i].filename;
+			    				
+			    				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+			    				div2.className="file-img";
+			    				p.className="file-title-box";
+			    				span1.className="file-title";
+			    				span2.className="file-edtor";
+			    				input.className="edtor";
+			    				input.value="";
+			    				input.type="text";
+			    				div2.appendChild(si);
+			    				a.appendChild(span1);
+			    				p.appendChild(a);
+			    				p.appendChild(span2);
+			    				span2.appendChild(input);
+			    				span1.innerHTML=json[i].filename;
+			    				div1.appendChild(lable);
+			    				div1.appendChild(div2);
+			    				div1.appendChild(p);
+			    				console.log(div1);
+			    				div0.className="file-item";
+			    				div0.id="file-item";
+			    				div0.appendChild(div1);
+			    				fileitem.appendChild(div0);
+			    				}
+			    			}
+			    			for(let i=0;i<json.length;i++){
+			    				if(uri=="http://localhost:8080/TopCloud/getfile.do?"){
+			    				if(json[i].dir==false&&json[i].filelevel==1){
+			    				var div0=document.createElement("div");
+			    				var div1=document.createElement("div");
+			    				var si=document.createElement("i");
+			    				var lable=document.createElement("lable");
+			    				var div2=document.createElement("div");
+			    				var p=document.createElement("p");
+			    				var span1=document.createElement("span");
+			    				var span2=document.createElement("span");
+			    				var input=document.createElement("input");
+			    				var a=document.createElement("a");
+			    				var partment="javascript:Fileloadding('"+json[i].filename+"');";
+			    				a.setAttribute('href', partment);    					
+			    				div1.className="item";
+			    				div1.id=""+json[i].filename;
+			    				lable.className="checkbox";
+			    				lable.id="checkbox "+json[i].filename;
+			    				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+			    				div2.className="file-img-my";
+			    				p.className="file-title-box";
+			    				span1.className="file-title";
+			    				span2.className="file-edtor";
+			    				input.className="edtor";
+			    				input.value="";
+			    				input.type="text";
+			    				si.style.background="url(img/"+json[i].filetype+".png) no-repeat 0px 2px";
+			    				div2.appendChild(si);
+			    				a.appendChild(span1);
+			    				p.appendChild(a);
+			    				p.appendChild(span2);
+			    				span2.appendChild(input);
+			    				span1.innerHTML=json[i].filename;
+			    				div1.appendChild(lable);
+			    				div1.appendChild(div2);
+			    				div1.appendChild(p);
+			    				console.log(div1);
+			    				div0.className="file-item";
+			    				div0.id="file-item";
+			    				div0.appendChild(div1);
+			    				fileitem.appendChild(div0);
+			    				}
+			    			}else if(json[i].dir==false){
+			    				var div0=document.createElement("div");
+			    				var div1=document.createElement("div");
+			    				var si=document.createElement("i");
+			    				var lable=document.createElement("lable");
+			    				var div2=document.createElement("div");
+			    				var p=document.createElement("p");
+			    				var span1=document.createElement("span");
+			    				var span2=document.createElement("span");
+			    				var input=document.createElement("input");
+			    				var a=document.createElement("a");
+			    				var partment="javascript:Fileloadding('"+json[i].filename+"');";
+			    				a.setAttribute('href', partment);
+			    				div1.className="item";
+			    				div1.id=""+json[i].filename;
+			    				lable.className="checkbox";
+			    				lable.id="checkbox "+json[i].filename;
+			    				lable.setAttribute("onclick", "labletChecked('" + json[i].filename + "')");
+			    				div2.className="file-img-my";
+			    				p.className="file-title-box";
+			    				span1.className="file-title";
+			    				span2.className="file-edtor";
+			    				input.className="edtor";
+			    				input.value="";
+			    				input.type="text";
+			    				si.style.background="url(img/"+json[i].filetype+".png) no-repeat 0px 2px";
+			    				div2.appendChild(si);
+			    				a.appendChild(span1);
+			    				p.appendChild(a);
+			    				p.appendChild(span2);
+			    				span2.appendChild(input);
+			    				span1.innerHTML=json[i].filename;
+			    				div1.appendChild(lable);
+			    				div1.appendChild(div2);
+			    				div1.appendChild(p);
+			    				console.log(div1);
+			    				div0.className="file-item";
+			    				div0.id="file-item";
+			    				div0.appendChild(div1);
+			    				fileitem.appendChild(div0);
+			    				}
+			    			}
+			    		}
+						);
+		$(function(){
+			$(".file-list").delegate(".file-item","hover",function(event){
+					$(this).toggleClass('file-checked');
+				});
+			});
+		   }	
+	   //关闭详情菜单
+		function downUploadWindowsXiangqing(){
+			var xiangqingDivs=document.getElementById("xiangqingDivs");
+			var pathle=getSelectFileName();
+			console.log(xiangqingDivs);
+			xiangqingDivs.style.display="none";
+			loadFileSystem('root',uri);
+			var	selectIng=document.getElementById("selectIng");
+	   		selectIng.innerHTML="";
+			}
+
+		//搜索
+    function SearchFile(){
+    	 var SearchId= document.getElementById("SearchId");
+    	 console.log(SearchId);
+    	 var pathle=SearchId.value;
+    		var fileitem=document.getElementById("fileitem");
+	   		fileitem.innerHTML="";
+	   		var	selectIng=document.getElementById("selectIng");
+	   		selectIng.innerHTML="";
+    	 $.post(
+					"selectFileByName.do?",
+					{"fileName":pathle},
+					function(data){
+						funload(data);
+						}
+		   			);
+        }
+
+  </script>
+</body>
+
+</html>

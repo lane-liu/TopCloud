@@ -1,0 +1,14 @@
+/*
+ * Copy Right: Tencent ISUX
+ * Project: 微云首页登录框
+ * Comments: 微云首页登录框样式
+ * author: janochen
+ * date: 2015.10.12
+ */
+
+/*重置微信登录样式*/
+body{margin: 0;}
+.impowerBox .title{display: none;}
+.impowerBox .qrcode{width: 150px;height: 150px;margin-top: 58px;}
+.impowerBox .status p{font-size: 14px;}
+.impowerBox .title{display: none;}

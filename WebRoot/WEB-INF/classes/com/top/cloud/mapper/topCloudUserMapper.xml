@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.top.cloud.mapper.TopCloudUserMapper">
+	<select id="login"  resultType="com.top.cloud.bean.TopCloudUser">
+		select * from topcloud_user where username=#{username}
+	</select>
+	
+			<select id="checkedEmail"  resultType="com.top.cloud.bean.TopCloudUser">
+		select * from topcloud_user where email=#{email}
+	</select>
+	<insert id="regist" parameterType="com.top.cloud.bean.TopCloudUser">
+		insert into topcloud_user(username,password,email) values(#{username},#{password},#{email});
+	</insert>
+	
+		<select id="selectId"  resultType="com.top.cloud.bean.TopCloudUser">
+		select * from topcloud_user where username=#{username}
+	</select>
+	
+	
+			<select id="SelectByPassword"  resultType="com.top.cloud.bean.TopCloudUser">
+		select * from topcloud_user where id=#{id}
+	</select>
+	
+		<update id="ChangeById" parameterType="com.top.cloud.bean.TopCloudUser" >
+		update topcloud_user set password=#{password} where id=#{id}
+	</update>
+	
+	<select id="getTopCloudUser" parameterType="int" resultType="com.top.cloud.bean.TopCloudUser" >
+		select * from topcloud_user where id=#{id}
+	</select>
+	
+		<update id="updateUserInfor" parameterType="com.top.cloud.bean.TopCloudUser">
+	update topcloud_user set sex=#{sex},address=#{address},tel=#{tel} where id=#{id};
+	</update>
+	
+		<!--邮箱验证  -->
+	<update id="insertMailboxCode" parameterType="com.top.cloud.bean.TopCloudUser" >
+	update topcloud_user set is_ckeckedEmail=#{is_ckeckedEmail} where id=#{id}
+	</update>
+</mapper>

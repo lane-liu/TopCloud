@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.top.cloud.mapper.FileSystemMapper">
+<insert id="upLoadFile" parameterType="com.top.cloud.bean.TopCloudFile" >
+		insert into topcloud_file(filename,filepath,isDir,filesize,fileuploadtime,filetype,filelevel,user_id)
+		 values(#{filename},#{filepath},#{isDir},#{filesize},#{fileuploadtime},#{filetype},#{filelevel},#{user_id})
+	</insert>
+	<insert id="CrectedFolder" parameterType="com.top.cloud.bean.TopCloudFile" >
+		insert into topcloud_file(filename,filepath,isDir,filesize,fileuploadtime,filetype,filelevel,user_id)
+		 values(#{filename},#{filepath},#{isDir},#{filesize},#{fileuploadtime},#{filetype},#{filelevel},#{user_id})
+	</insert>
+	<select id="getFile" parameterType="com.top.cloud.bean.SelectFile" resultType="com.top.cloud.bean.TopCloudFile">
+		select * from topcloud_file where user_id=#{id} and filepath=#{filepath}
+	</select>
+	
+	<select id="getAllFile"  resultType="com.top.cloud.bean.TopCloudFile">
+		select * from topcloud_file where user_id=#{id} 
+	</select>
+	
+		<select id="getAllDocument"  parameterType="int" resultType="com.top.cloud.bean.TopCloudFile">
+		select * from topcloud_file where filetype in('doc','txt','pptx','wps','rtf','html','pdf') and user_id=#{id};
+	</select>
+
+	<select id="getAllMusic" parameterType="int" resultType="com.top.cloud.bean.TopCloudFile">
+	   select * from topcloud_file where filetype in('mp3','wav','ape','flac','mid','aif')and user_id=#{id};
+	</select>
+		<select id="getAllVideo" parameterType="int" resultType="com.top.cloud.bean.TopCloudFile">
+	   select * from topcloud_file where filetype in('mp4','rmvb','avi')and user_id=#{id};
+	</select>
+			<select id="getAllPicture" parameterType="int" resultType="com.top.cloud.bean.TopCloudFile">
+	   select * from topcloud_file where filetype in('png','jpg','gif')and user_id=#{id};
+	</select>
+ 	<!-- 根据路径、文件名、用户ID 删除文件 -->
+	<delete id="deleteFile" parameterType="com.top.cloud.bean.TopCloudFile">
+		delete from topcloud_file where filename=#{filename} and filepath=#{filepath} and user_id=#{user_id}
+	</delete>
+	
+	<!-- 根据路径名 删除文件夹和文件夹下的所有文件 -->
+	<delete id="deleteCloudFile">
+		delete from topcloud_file where filepath like #{Cloud};
+	</delete>
+	
+		<select id="getVagueFile" parameterType="com.top.cloud.bean.SelectFile" resultType="com.top.cloud.bean.TopCloudFile">
+		select * from topcloud_file 
+        where user_id=#{id} and filepath like CONCAT('%',#{filepath},'%')
+	</select>
+	<update id="changeFileName" parameterType="com.top.cloud.bean.ChangeName">
+	update topcloud_file
+    set filename=#{newName} ,fileuploadtime=#{data}
+    where user_id=#{user_id} and filename=#{oldName} and filepath=#{root};
+	</update>
+	
+	<update id="changeDirName" parameterType="com.top.cloud.bean.ChangeName">
+	update topcloud_file set filepath=#{newPath},fileuploadtime=#{date} where user_id=#{user_id} and filepath=#{oldPath}
+	</update>
+	
+	<update id="moveFile" parameterType="com.top.cloud.bean.MoveFile" >
+	update topcloud_file set filepath=#{newPath},fileuploadtime=#{date} where user_id=#{user_id} and filepath=#{oldPath} and filename=#{fileName}
+	</update>
+	
+		<select id="selectedFileName" resultType="com.top.cloud.bean.TopCloudFile" parameterType="String"> 
+	  select * from topcloud_file where filename like CONCAT('%',#{filename},'%')
+	</select>
+	
+		<select id="selectByPathAndNameWithGarbage" resultType="com.top.cloud.bean.TopCloudFile" parameterType="com.top.cloud.bean.TopCloudFile"> 
+	  select * from topcloud_file where filename=#{filename} and filepath=#{filepath} and user_id=#{user_id}
+	</select>
+	
+		<select id="findLinkShare" parameterType="com.top.cloud.bean.TopCloudFile" resultType="com.top.cloud.bean.TopCloudFile">
+	select * from topcloud_file where filename=#{filename} and filepath=#{filepath} and user_id=#{user_id}
+	</select>
+	<update id="insertLinkShare" parameterType="com.top.cloud.bean.TopCloudFile" >
+	update topcloud_file set MD5ID=#{MD5ID} where filename=#{filename} and filepath=#{filepath} and user_id=#{user_id}
+	</update>
+	
+		<select id="findLinkShareDownload"  resultType="com.top.cloud.bean.TopCloudFile">
+	select * from topcloud_file where MD5ID=#{mD5ID};
+	</select>
+	
+		<select id="getXiangQing" parameterType="com.top.cloud.bean.TopCloudFile" resultType="com.top.cloud.bean.TopCloudFile">
+		select * from topcloud_file where user_id=#{user_id} and filepath=#{filepath} and filename=#{filename}
+	</select>
+</mapper>

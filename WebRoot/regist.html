@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>注册</title>
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+	<link rel="stylesheet" href="assets/css/base.css">
+	<link rel="stylesheet" href="assets/css/login.css">
+	 <link rel="shortcut icon" href="img/favicon2.ico" type="image/x-icon" />
+	<style type="text/css">
+	input{color:#0f88eb;}
+	</style>
+</head>
+<body>
+	<div id="particles-js"  style="background-image: url(assets/img/night-05.jpg);" ></div>
+	<div id="wrapper">
+		<div>
+			<img src="assets/img/zhihu_logo.png" />
+			<h2>与世界接轨  让美好永远陪伴</h2>
+		</div>
+		<nav class="switch_nav">
+			<a href="javascript:;" id="switch_signup" class="switch_btn on">注册</a>
+			<div class="switch_bottom" id="switch_bottom"></div>
+		</nav>
+		<form method="post" action="">
+			<ul class="group_input">
+				<li>
+					<input type="text" autocomplete="off" placeholder="用户名" class="name required"  value=""  id="username" />
+				</li><br />
+				<li>
+					<input type="text" autocomplete="off" placeholder="邮箱" class="email required" value="" id="email" />
+				</li><br />
+				<li>
+					<input type="password" placeholder="密码(不少于6位)" class="psd required" value="" id="psd" />
+				</li><br />
+				<li>
+					<input type="password" placeholder="重复密码" class="repsd required" value="" id="repsd" />
+				</li><br />
+				
+				<li>
+					<input type="text" autocomplete="off" style="width: 40px;" placeholder="验证码" class="code required" id="code" />
+					<img class="yzm_img" style="width=50px" id='imgVcode' src="checkCode" onclick="document.getElementById('imgVcode').src = 'checkCode?'+(new Date()).getTime()"/>
+				</li>
+			</ul>
+			<button type="submit" class="submit_btn" id="btnSubmit" onclick="sendSubmit();">注册拓朴云盘</button>
+			<span class="agreement-tip">点击「注册」按钮，即代表你同意<a href="javascript:;">《拓朴协议》</a></span>
+		</form>
+		<div class="QRcode_btn">
+			<div type="submit" class="submit_btn download_btn"></div>
+			<div class="QRcode">
+				<div class="box"></div>
+			</div>
+
+		</div>
+	
+		<div id="footer">
+			<span>&copy;2017拓朴</span><span>·</span><a href="javascript:;">拓朴圆桌</a><span>·</span><a href="javascript:;">发现</a><span>·</span><a href="javascript:;">云盘应用</a><span>·</span><a href="login.html">使用机构账号登录</a><span>·</span><a href="javascript:;">联系我们</a><span>·</span><a href="javascript:;">存储来拓朴</a><br />
+			<span>·</span><a href="javascript:;">京ICP证110745号</a><span>·</span><span>京公网安备11010802010035号</span><span>·</span><a href="javascript:;">出版物经营许可证</a>
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/sweetalert2.min.js"></script>
+	<script src="js/particles.min.js"></script>
+	<script src="js/app.js"></script>
+	<script>
+	var checkedusername=false;
+	var checkedpassword=false;
+	var checkedcheckcode=false;
+	var checkedpassworddel=false;
+	var checkedemail=false;
+	function sendSubmit(){
+	if(checkedusername&&checkedpassword&&checkedcheckcode&&checkedpassworddel&&checkedemail){
+	var username=document.getElementById("username").value;
+	var email=document.getElementById("email").value;
+	var password=document.getElementById("psd").value;
+		$.post(
+				"regist.do?",
+			{
+			"username":username,
+			"email":email,
+			"password":password
+			},
+		function(data){
+		if(data==true){
+			location="login.html";
+		}else{
+			alert("注册失败");
+		}
+		}
+		);
+	}
+	else{
+		alert("数据不能为空");
+	}
+	}
+	
+		$(function() {
+			$("form :input").blur(function() {
+					var $parent = $(this).parent();
+					$parent.find(".msg").remove(); //删除以前的提醒元素（find()：查找匹配元素集中元素的所有匹配元素）
+
+					//验证用户名
+					if($(this).is("#username")) {
+						var nameVal = $.trim(this.value);
+						var regName = /[~#^$@%&!*()<>:;'"{}【】  ]/;
+						if(nameVal == "" || nameVal.length < 2 || regName.test(nameVal)) {
+							var errorMsg = " 用户名非空，长度2-20位，不包含特殊字符！";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedusername=false;
+						} else {
+							$.get("checkedName.do?name="+nameVal, function(data){
+								if(data==1){
+								var okMsg = " 用户名可以使用";
+							$parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+							checkedusername=true;
+								}else{
+							var errorMsg = " 用户名被占用";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedusername=false;
+								}
+	    					});
+						}
+					}
+					
+					//验证邮箱
+					if($(this).is("#email")) {
+						var emailVal = $.trim(this.value);
+						var regEmail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+						if(emailVal == "" || !regEmail.test(emailVal)) {
+							var errorMsg = " 请输入正确邮箱！";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedemail=false;
+						} else {
+							$.get("checkedEmail.do?email="+emailVal, function(data){
+							if(data==1){
+							var okMsg = " 邮箱可以使用";
+							$parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+							checkedemail=true;
+								}else{
+							var errorMsg = " 邮箱被占用";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedemail=false;
+								}
+	    					});
+						}
+					}
+					//验证密码
+					if($(this).is("#psd")) {
+						var psdVal = $.trim(this.value);
+						var regPsd = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
+						if(psdVal == "" || !regPsd.test(psdVal)) {
+							var errorMsg = " 密码为6-20位字母、数字的组合！";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedpassword=false;
+						} else {
+							var okMsg = " 输入正确";
+							$parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+							checkedpassword=true;
+						}
+					}
+
+					//验证确认密码
+					if($(this).is("#repsd")) {
+						var psdVal = $("#psd").val();
+						var repsdVal = $.trim(this.value);
+						if(repsdVal == "") {
+							var errorMsg = " 请确认您的密码";
+							$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+							checkedpassworddel=false;
+						} else {
+							if(repsdVal != psdVal) {
+								var errorMsg = " 您输入密码前后不一致";
+								$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+								checkedpassworddel=false;
+							} else {
+								var okMsg = " 输入正确";
+								$parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+								checkedpassworddel=true;
+							}
+						}
+					}
+
+//					验证验证码
+					if($(this).is("#code")) {
+						var code = $.trim(this.value);
+						//异步发送AJAX请求
+						
+						$.get("checkCode.do?verifyCode=" + code, function(data) {
+						console.log("-------------------------------------->"+data);
+								if(data ==0) {
+									var errorMsg = " 请输入图片中的四个字母。";
+									$parent.append("<span class='msg onError'>" + errorMsg + "</span>");
+									checkedcheckcode=false;
+								} else if(data==1){
+									var okMsg = " 输入正确";
+									$parent.append("<span class='msg onSuccess'>" + okMsg + "</span>");
+									checkedcheckcode=true;
+								}
+							});
+						}
+					 
+
+					}).keyup(function() {
+					//triggerHandler 防止事件执行完后，浏览器自动为标签获得焦点
+					$(this).triggerHandler("blur");
+				}).focus(function() {
+					$(this).triggerHandler("blur");
+				});
+
+				//点击重置按钮时，通过trigger()来触发文本框的失去焦点事件
+				$("#btnSubmit").click(function() {
+					//trigger 事件执行完后，浏览器会为submit按钮获得焦点
+					$("form .required:input").trigger("blur");
+					var numError = $("form .onError").length;
+					if(numError) {
+						return false;
+					}
+					alert('注册成功');
+				});
+			})
+
+	</script> 
+</body>
+</html>

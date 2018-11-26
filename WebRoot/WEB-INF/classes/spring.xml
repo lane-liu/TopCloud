@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           ">
+	<!-- 1. 数据源 : DriverManagerDataSource -->
+	<bean id="dataSource" 
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/topcloud"/>
+		<property name="username" value="root"/>
+		<property name="password" value="123456"/>
+	</bean>
+	<!--2  配置扫描区域 -->
+	 <context:component-scan base-package="com.top.cloud.service"/>
+
+
+	<!-- 
+		3. mybatis的SqlSession的工厂: SqlSessionFactoryBean 
+			dataSource / typeAliasesPackage
+	-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis.xml" />
+        <property name="mapperLocations" value="classpath:com/top/cloud/mapper/*.xml" />
+		<property name="typeAliasesPackage" value="classpath:com.top.cloud.bean"/>
+	</bean>
+
+	<!-- 
+		4. mybatis自动扫描加载Sql映射文件 : MapperScannerConfigurer 
+			sqlSessionFactory / basePackage
+	-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.top.cloud.mapper"/>
+	</bean>
+	 
+           <!--5    加载事务管理-->
+     	<bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+     		<property name="dataSource" ref="dataSource"></property>
+     	</bean>
+     	<!--   基于注解 
+          <tx:annotation-driven transaction-manager="tx"/>-->
+          
+          <!-- 基于xml配置事务 -->
+          	<tx:advice id="txadvice" transaction-manager="tx">
+          	<!-- 指明哪些方法上添加事务的增强方案 -->
+          	<tx:attributes>
+          		<tx:method name="save*"/>
+          		<tx:method name="update*"/>
+          		<tx:method name="delete*"/>
+          	</tx:attributes>
+          	</tx:advice>
+          	
+          	<!-- 配置Aop -->
+          	<aop:config >
+          	<!-- 配置切点表达式 -->
+          	<aop:pointcut expression="execution(* com.top.cloud.service.*.*(..))" id="pointcut"/>
+          	<!-- 配置事务增强方案 相当于是切面-->
+          	<aop:advisor advice-ref="txadvice" order="1" pointcut-ref="pointcut"/>
+          	</aop:config>
+          	
+	
+</beans>
